@@ -43,9 +43,15 @@ function cellClicked(r, c) {
 
     console.log(`Cell ${r}, ${c} is now ${state.board[r][c]}`);
 
-    switchPlayer();
     updateCell(r, c);
+    switchPlayer();
     updateUI();
+    
+    const winner = checkWin();
+    if (winner) {
+        state[winner].score++;
+        showScreen('end');
+    }
 }
 
 
@@ -74,6 +80,40 @@ function generateBoard(x) {
         }
         board.appendChild(row);
     }
+}
+
+function checkWin() {
+    const board = state.board;
+
+    // check rows
+    for (let i = 0; i < board.length; i++) {
+        const row = board[i];
+        if (row.every(cell => cell === row[0] && cell !== '')) {
+            return row[0] === state.player1.symbol ? 'player1' : 'player2';
+        }
+    }
+
+    // check columns
+    for (let i = 0; i < board.length; i++) {
+        const column = board.map(row => row[i]);
+        if (column.every(cell => cell === column[0] && cell !== '')) {
+            return column[0] === state.player1.symbol ? 'player1' : 'player2';
+        }
+    }
+
+    // check diagonals
+    const diagonal1 = board.map((row, i) => row[i]);
+    const diagonal2 = board.map((row, i) => row[board.length - i - 1]);
+
+    if (diagonal1.every(cell => cell === diagonal1[0] && cell !== '')) {
+        return diagonal1[0] === state.player1.symbol ? 'player1' : 'player2';
+    }
+
+    if (diagonal2.every(cell => cell === diagonal2[0] && cell !== '')) {
+        return diagonal2[0] === state.player1.symbol ? 'player1' : 'player2';
+    }
+
+    return null;
 }
 
 function updateCell(r, c) {
@@ -109,6 +149,7 @@ function startGame() {
     // choose random player to start
     state.currentPlayer = Math.random() < 0.5 ? 'player1' : 'player2';
 
+    resetState();
     resetBoard();
     generateBoard(state.boardSize);
     updateUI();
