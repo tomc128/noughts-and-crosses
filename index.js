@@ -154,6 +154,7 @@ function checkGameOver() {
 
 function updateCell(r, c) {
     const cell = document.querySelector(`.row:nth-child(${r + 1}) .cell:nth-child(${c + 1})`);
+    cell.classList.add('filled');
     cell.innerHTML = state.board[r][c];
 }
 

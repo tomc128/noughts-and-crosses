@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap');
+
 $background-colour: rgb(26, 26, 31);
 $foreground-colour: rgb(255, 233, 233);
 
@@ -7,7 +9,9 @@ $board-background: rgb(17, 17, 20);
 $cell-background: rgb(35, 35, 44);
 
 
-$border-radius: 4px;
+$main-border-radius: 4px;
+
+$filled-cell-border-radius: 50%;
 
 
 
@@ -15,6 +19,7 @@ $border-radius: 4px;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Figtree', sans-serif;
 }
 
 .screen {
@@ -22,15 +27,15 @@ $border-radius: 4px;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    height: 100vh;
+    width: 100vw;
 
     &:not(.active) {
         display: none;
     }
 
-    height: 100vh;
-    width: 100vw;
-
     background-color: $background-colour;
+    color: $foreground-colour;
 
     &#menu {
     }
@@ -46,7 +51,7 @@ $border-radius: 4px;
     gap: 1rem;
     padding: 1rem;
 
-    border-radius: $border-radius;
+    border-radius: $main-border-radius;
     background-color: $board-background;
 
     .row {
@@ -57,10 +62,22 @@ $border-radius: 4px;
         .cell {
             height: 100px;
             width: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 3rem;
+            font-weight: 700;
             background-color: $cell-background;
-            border-radius: $border-radius;
+            color: $foreground-colour;
+            border-radius: $main-border-radius;
+
+            &.filled {
+                border-radius: $filled-cell-border-radius;
+            }
 
             > span.debug-info {
+                display: none;
                 color: $foreground-colour;
             }
         }
