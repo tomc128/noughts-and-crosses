@@ -66,7 +66,7 @@ function cellClicked(r, c) {
         gameOver(null);
         return;
     }
-    
+
     switchPlayer();
 }
 
@@ -93,6 +93,13 @@ function generateBoard(x) {
             cell.innerHTML = `<span class="debug-info">${i}, ${j}</span>`;
 
             row.appendChild(cell);
+
+            cell.addEventListener('mouseover', () => {
+                cell.setAttribute('data-hover', state[state.currentPlayer].symbol);
+            });
+            cell.addEventListener('mouseout', () => {
+                cell.removeAttribute('data-hover');
+            });
         }
         board.appendChild(row);
     }

@@ -5,9 +5,9 @@ $foreground-colour: rgb(255, 233, 233);
 
 
 $board-background: rgb(17, 17, 20);
-
 $cell-background: rgb(35, 35, 44);
 
+$button-background: rgb(35, 35, 44);
 
 $main-border-radius: 4px;
 
@@ -96,6 +96,24 @@ $filled-cell-border-radius: 50%;
 
             &:not(.filled) {
                 cursor: pointer;
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    font-size: 3rem;
+                    font-weight: 400;
+                    color: $foreground-colour;
+                    opacity: 0;
+
+                    transition: opacity 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+                }
+
+                &:hover {
+                    &::after {
+                        content: attr(data-hover);
+                        opacity: 0.5;
+                    }
+                }
             }
 
             > span.debug-info {
@@ -103,5 +121,23 @@ $filled-cell-border-radius: 50%;
                 color: $foreground-colour;
             }
         }
+    }
+}
+
+.button {
+    display: inline-block;
+    padding: 1rem;
+    cursor: pointer;
+
+    border-radius: $main-border-radius;
+    background-color: $button-background;
+    color: $foreground-colour;
+    text-decoration: none;
+
+    transition: background-color 1s cubic-bezier(0.075, 0.82, 0.165, 1), color 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+    &:hover {
+        background-color: $foreground-colour;
+        color: $background-colour;
     }
 }
