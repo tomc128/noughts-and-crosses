@@ -6,6 +6,8 @@ const player2ScoreDisplay = document.getElementById('player2-score');
 
 const currentTurnDisplay = document.getElementById('current-turn');
 
+const winnerDisplay = document.getElementById('winner');
+
 const screenDict = {};
 screens.forEach(screen => {
     screenDict[screen.id] = screen;
@@ -34,11 +36,19 @@ function resetState() {
     };
 }
 
+function resetBoardState() {
+    state.board = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+    ]
+}
+
 
 function cellClicked(r, c) {
-    if (state.board[r][c] !== '') 
+    if (state.board[r][c] !== '')
         return;
-    
+
     state.board[r][c] = state[state.currentPlayer].symbol;
 
     console.log(`Cell ${r}, ${c} is now ${state.board[r][c]}`);
@@ -46,11 +56,15 @@ function cellClicked(r, c) {
     updateCell(r, c);
     switchPlayer();
     updateUI();
-    
+
     const winner = checkWin();
     if (winner) {
         state[winner].score++;
-        showScreen('end');
+        gameOver(winner);
+    }
+
+    if (checkGameOver()) {
+        gameOver(null);
     }
 }
 
@@ -62,7 +76,7 @@ function resetBoard() {
 
 function generateBoard(x) {
     const board = document.getElementById('board');
-    
+
     for (let i = 0; i < x; i++) {
         const row = document.createElement('div');
         row.classList.add('row');
@@ -80,6 +94,15 @@ function generateBoard(x) {
         }
         board.appendChild(row);
     }
+}
+
+function gameOver(winner) {
+    if (winner) {
+        winnerDisplay.innerHTML = `${winner === 'player1' ? 'Player 1 (X)' : 'Player 2 (O)'} wins!`;
+    } else {
+        winnerDisplay.innerHTML = 'It\'s a draw!';
+    }
+    showScreen('end');
 }
 
 function checkWin() {
@@ -116,6 +139,19 @@ function checkWin() {
     return null;
 }
 
+function checkGameOver() {
+    const board = state.board;
+    for (let i = 0; i < board.length; i++) {
+        const row = board[i];
+        for (let j = 0; j < row.length; j++) {
+            if (row[j] === '') {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 function updateCell(r, c) {
     const cell = document.querySelector(`.row:nth-child(${r + 1}) .cell:nth-child(${c + 1})`);
     cell.innerHTML = state.board[r][c];
@@ -145,11 +181,23 @@ function startGame() {
     showScreen('game');
 
     state.boardSize = parseInt(boardSizeSelector.value);
-    
+
     // choose random player to start
     state.currentPlayer = Math.random() < 0.5 ? 'player1' : 'player2';
 
     resetState();
+    resetBoard();
+    generateBoard(state.boardSize);
+    updateUI();
+}
+
+function replay() {
+    showScreen('game');
+
+    // choose random player to start
+    state.currentPlayer = Math.random() < 0.5 ? 'player1' : 'player2';
+
+    resetBoardState();
     resetBoard();
     generateBoard(state.boardSize);
     updateUI();
