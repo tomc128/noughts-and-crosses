@@ -19,6 +19,7 @@ function resetState() {
     state = {
         currentScreen: 'menu',
         boardSize: 3,
+        matchCount: 3,
         player1: {
             score: 0,
             symbol: 'X'
@@ -27,21 +28,12 @@ function resetState() {
             score: 0,
             symbol: 'O'
         },
-        currentPlayer: 'player1',
-        board: [
-            ['', '', ''],
-            ['', '', ''],
-            ['', '', '']
-        ]
+        currentPlayer: 'player1'
     };
 }
 
-function resetBoardState() {
-    state.board = [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', '']
-    ]
+function resetBoardState(x) {
+    state.board = Array(x).fill().map(() => Array(x).fill(''));
 }
 
 
@@ -179,29 +171,28 @@ function updateUI() {
 
 // Start button onclick event
 function startGame() {
-    showScreen('game');
-
+    resetState();
+    
+    state.currentPlayer = Math.random() < 0.5 ? 'player1' : 'player2';
     state.boardSize = parseInt(boardSizeSelector.value);
 
-    // choose random player to start
-    state.currentPlayer = Math.random() < 0.5 ? 'player1' : 'player2';
-
-    resetState();
+    resetBoardState(state.boardSize);
     resetBoard();
     generateBoard(state.boardSize);
     updateUI();
+
+    showScreen('game');
 }
 
 function replay() {
-    showScreen('game');
-
-    // choose random player to start
     state.currentPlayer = Math.random() < 0.5 ? 'player1' : 'player2';
 
-    resetBoardState();
     resetBoard();
+    resetBoardState(state.boardSize);
     generateBoard(state.boardSize);
     updateUI();
+
+    showScreen('game');
 }
 
 resetState();
