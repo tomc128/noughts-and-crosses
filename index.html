@@ -13,11 +13,19 @@
     <div class="screen" id="menu">
         <h1>Noughts & Crosses</h1>
 
+        <label for="quantity">Board Size (3 to 5)</label>
+        <input type="number" id="board-size-selector" name="board-size" min="3" max="5" value="3">
+
         <a href="#" class="button" onclick="startGame()">Start Game</a>
     </div>
 
     <div class="screen" id="game">
         <h1>Game</h1>
+        <h2>It's <span id="current-turn">NULL</span> turn!</h2>
+
+        <span>Player 1: <span id="player1-score"></span></span>
+        <span>Player 2: <span id="player2-score"></span></span>
+
         <a href="#" class="button" onclick="showScreen('menu')">Back</a>
 
         <div id="board">

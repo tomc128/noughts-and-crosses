@@ -1,15 +1,58 @@
 const screens = document.querySelectorAll('.screen');
+const boardSizeSelector = document.getElementById('board-size-selector');
+
+const player1ScoreDisplay = document.getElementById('player1-score');
+const player2ScoreDisplay = document.getElementById('player2-score');
+
+const currentTurnDisplay = document.getElementById('current-turn');
 
 const screenDict = {};
 screens.forEach(screen => {
     screenDict[screen.id] = screen;
 });
 
+let state;
 
-function cellClicked(r, c) {
-    console.log(`Cell clicked: row ${r}, column ${c}`);
+function resetState() {
+    state = {
+        currentScreen: 'menu',
+        boardSize: 3,
+        player1: {
+            score: 0,
+            symbol: 'X'
+        },
+        player2: {
+            score: 0,
+            symbol: 'O'
+        },
+        currentPlayer: 'player1',
+        board: [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', '']
+        ]
+    };
 }
 
+
+function cellClicked(r, c) {
+    if (state.board[r][c] !== '') 
+        return;
+    
+    state.board[r][c] = state[state.currentPlayer].symbol;
+
+    console.log(`Cell ${r}, ${c} is now ${state.board[r][c]}`);
+
+    switchPlayer();
+    updateCell(r, c);
+    updateUI();
+}
+
+
+function resetBoard() {
+    const board = document.getElementById('board');
+    board.innerHTML = '';
+}
 
 function generateBoard(x) {
     const board = document.getElementById('board');
@@ -33,6 +76,14 @@ function generateBoard(x) {
     }
 }
 
+function updateCell(r, c) {
+    const cell = document.querySelector(`.row:nth-child(${r + 1}) .cell:nth-child(${c + 1})`);
+    cell.innerHTML = state.board[r][c];
+}
+
+function switchPlayer() {
+    state.currentPlayer = state.currentPlayer === 'player1' ? 'player2' : 'player1';
+}
 
 
 function showScreen(screenName) {
@@ -42,10 +93,26 @@ function showScreen(screenName) {
     screenDict[screenName].classList.add('active');
 }
 
+function updateUI() {
+    player1ScoreDisplay.innerHTML = state.player1.score;
+    player2ScoreDisplay.innerHTML = state.player2.score;
+
+    currentTurnDisplay.innerHTML = state.currentPlayer === 'player1' ? 'Player 1 (X)' : 'Player 2 (O)';
+}
+
 // Start button onclick event
 function startGame() {
     showScreen('game');
+
+    state.boardSize = parseInt(boardSizeSelector.value);
+    
+    // choose random player to start
+    state.currentPlayer = Math.random() < 0.5 ? 'player1' : 'player2';
+
+    resetBoard();
+    generateBoard(state.boardSize);
+    updateUI();
 }
 
+resetState();
 showScreen('menu');
-generateBoard(3);
