@@ -71,9 +71,16 @@ $filled-cell-border-radius: 50%;
             background-color: $cell-background;
             color: $foreground-colour;
             border-radius: $main-border-radius;
+            user-select: none;
+
+            transition: border-radius 1s cubic-bezier(0.075, 0.82, 0.165, 1);
 
             &.filled {
                 border-radius: $filled-cell-border-radius;
+            }
+
+            &:not(.filled) {
+                cursor: pointer;
             }
 
             > span.debug-info {
