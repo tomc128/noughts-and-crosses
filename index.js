@@ -1,4 +1,15 @@
 const screens = document.querySelectorAll('.screen');
+const screenDict = {};
+screens.forEach(screen => {
+    screenDict[screen.id] = screen;
+});
+const overlays = document.querySelectorAll('.overlay');
+const overlayDict = {};
+overlays.forEach(overlay => {
+    overlayDict[overlay.id] = overlay;
+});
+
+
 const boardSizeSelector = document.getElementById('board-size-selector');
 const matchCountSelector = document.getElementById('match-count-selector');
 
@@ -9,10 +20,6 @@ const currentTurnDisplay = document.getElementById('current-turn');
 
 const winnerDisplay = document.getElementById('winner');
 
-const screenDict = {};
-screens.forEach(screen => {
-    screenDict[screen.id] = screen;
-});
 
 let state;
 
@@ -97,7 +104,7 @@ function gameOver(winner) {
     } else {
         winnerDisplay.innerHTML = 'It\'s a draw!';
     }
-    showScreen('end');
+    showOverlay('end');
 }
 
 function checkWin() {
@@ -248,6 +255,23 @@ function showScreen(screenName) {
     screenDict[screenName].classList.add('active');
 }
 
+function showOverlay(overlayName) {
+    for (let overlay in overlayDict) {
+        overlayDict[overlay].classList.remove('active');
+    }
+    overlayDict[overlayName].classList.add('active');
+}
+
+function hideOverlay(overlayName) {
+    overlayDict[overlayName].classList.remove('active');
+}
+
+function hideAllOverlays() {
+    for (let overlay in overlayDict) {
+        overlayDict[overlay].classList.remove('active');
+    }
+}
+
 function updateUI() {
     player1ScoreDisplay.innerHTML = state.player1.score;
     player2ScoreDisplay.innerHTML = state.player2.score;
@@ -273,6 +297,7 @@ function startGame() {
     generateBoard(state.boardSize);
     updateUI();
 
+    hideAllOverlays();
     showScreen('game');
 }
 
@@ -284,6 +309,7 @@ function replay() {
     generateBoard(state.boardSize);
     updateUI();
 
+    hideAllOverlays();
     showScreen('game');
 }
 

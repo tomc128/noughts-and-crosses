@@ -41,8 +41,23 @@ $filled-cell-border-radius: 50%;
     }
     &#game {
     }
-    &#end {
+}
+
+.overlay {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 3rem;
+
+    &:not(.active) {
+        display: none;
     }
+
+    background-color: $background-colour;
+    color: $foreground-colour;
+    border-radius: $main-border-radius;
 }
 
 #board {
