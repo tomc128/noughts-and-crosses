@@ -3,14 +3,13 @@
 $background-colour: rgb(26, 26, 31);
 $foreground-colour: rgb(255, 233, 233);
 
+$board-background-colour: rgb(17, 17, 20);
+$cell-background-colour: rgb(35, 35, 44);
 
-$board-background: rgb(17, 17, 20);
-$cell-background: rgb(35, 35, 44);
-
-$button-background: rgb(35, 35, 44);
+$button-background-colour: rgb(35, 35, 44);
 
 $main-border-radius: 4px;
-
+$hover-cell-border-radius: 24px;
 $filled-cell-border-radius: 50%;
 
 
@@ -67,7 +66,7 @@ $filled-cell-border-radius: 50%;
     padding: 1rem;
 
     border-radius: $main-border-radius;
-    background-color: $board-background;
+    background-color: $board-background-colour;
 
     .row {
         display: flex;
@@ -83,7 +82,7 @@ $filled-cell-border-radius: 50%;
 
             font-size: 3rem;
             font-weight: 700;
-            background-color: $cell-background;
+            background-color: $cell-background-colour;
             color: $foreground-colour;
             border-radius: $main-border-radius;
             user-select: none;
@@ -109,6 +108,8 @@ $filled-cell-border-radius: 50%;
                 }
 
                 &:hover {
+                    border-radius: $hover-cell-border-radius;
+
                     &::after {
                         content: attr(data-hover);
                         opacity: 0.5;
@@ -130,7 +131,7 @@ $filled-cell-border-radius: 50%;
     cursor: pointer;
 
     border-radius: $main-border-radius;
-    background-color: $button-background;
+    background-color: $button-background-colour;
     color: $foreground-colour;
     text-decoration: none;
 
