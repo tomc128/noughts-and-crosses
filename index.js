@@ -25,9 +25,9 @@ let state;
 
 function resetState() {
     state = {
-        currentScreen: 'menu',
         boardSize: 3,
         matchCount: 3,
+        boardIsInteractive: true,
         player1: {
             score: 0,
             symbol: 'X'
@@ -42,11 +42,15 @@ function resetState() {
 
 function resetBoardState(x) {
     state.board = Array(x).fill().map(() => Array(x).fill(''));
+    state.boardIsInteractive = true;
 }
 
 
 function cellClicked(r, c) {
     if (state.board[r][c] !== '')
+        return;
+    
+    if (!state.boardIsInteractive)
         return;
 
     updateCell(r, c);
@@ -106,6 +110,7 @@ function generateBoard(x) {
 }
 
 function gameOver(winner) {
+    state.boardIsInteractive = false;
     if (winner) {
         winnerDisplay.innerHTML = `${winner === 'player1' ? 'Player 1 (X)' : 'Player 2 (O)'} wins!`;
     } else {
