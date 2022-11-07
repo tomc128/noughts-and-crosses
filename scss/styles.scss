@@ -12,6 +12,19 @@ $main-border-radius: 4px;
 $hover-cell-border-radius: 24px;
 $filled-cell-border-radius: 50%;
 
+$overlay-blur: 24px;
+$overlay-blur-opacity: 0.25;
+$overlay-no-blur-opacity: 0.5;
+
+
+@mixin overlay($background-colour) {
+    background-color: rgba($background-colour, $overlay-no-blur-opacity);
+
+    @supports (backdrop-filter: blur($overlay-blur)) {
+        backdrop-filter: blur($overlay-blur);
+        background-color: rgba($background-colour, $overlay-blur-opacity);
+    }
+}
 
 
 * {
@@ -54,9 +67,11 @@ $filled-cell-border-radius: 50%;
         display: none;
     }
 
-    background-color: $background-colour;
+    // background-color: $background-colour;
     color: $foreground-colour;
     border-radius: $main-border-radius;
+
+    @include overlay($background-colour);
 }
 
 #board {
