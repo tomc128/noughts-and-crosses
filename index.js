@@ -1,5 +1,6 @@
 const screens = document.querySelectorAll('.screen');
 const boardSizeSelector = document.getElementById('board-size-selector');
+const matchCountSelector = document.getElementById('match-count-selector');
 
 const player1ScoreDisplay = document.getElementById('player1-score');
 const player2ScoreDisplay = document.getElementById('player2-score');
@@ -41,23 +42,25 @@ function cellClicked(r, c) {
     if (state.board[r][c] !== '')
         return;
 
-    state.board[r][c] = state[state.currentPlayer].symbol;
+    updateCell(r, c);
 
     console.log(`Cell ${r}, ${c} is now ${state.board[r][c]}`);
 
-    updateCell(r, c);
-    switchPlayer();
     updateUI();
 
     const winner = checkWin();
     if (winner) {
         state[winner].score++;
         gameOver(winner);
+        return;
     }
 
     if (checkGameOver()) {
         gameOver(null);
+        return;
     }
+    
+    switchPlayer();
 }
 
 
@@ -99,33 +102,114 @@ function gameOver(winner) {
 
 function checkWin() {
     const board = state.board;
+    const matchCount = state.matchCount;
 
-    // check rows
+    console.log(board);
+
+    // Check each direction (row, column, diagonals) for a match - must be at least matchCount in a row
+
+    // Check rows
     for (let i = 0; i < board.length; i++) {
         const row = board[i];
-        if (row.every(cell => cell === row[0] && cell !== '')) {
-            return row[0] === state.player1.symbol ? 'player1' : 'player2';
+        for (let j = 0; j < row.length; j++) {
+            if (row[j] === '') {
+                continue;
+            }
+
+            let match = true;
+
+            for (let k = 0; k < matchCount; k++) {
+                if (j + k >= row.length || row[j + k] !== row[j]) {
+                    match = false;
+                    break;
+                }
+                if (row[j + k] !== row[j]) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) {
+                return state.currentPlayer;
+            }
         }
     }
 
-    // check columns
+    // Check columns
     for (let i = 0; i < board.length; i++) {
-        const column = board.map(row => row[i]);
-        if (column.every(cell => cell === column[0] && cell !== '')) {
-            return column[0] === state.player1.symbol ? 'player1' : 'player2';
+        for (let j = 0; j < board.length; j++) {
+            if (board[i][j] === '') {
+                continue;
+            }
+
+            let match = true;
+
+            for (let k = 0; k < matchCount; k++) {
+                if (i + k >= board.length || board[i + k][j] !== board[i][j]) {
+                    match = false;
+                    break;
+                }
+                if (board[i + k][j] !== board[i][j]) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) {
+                return state.currentPlayer;
+            }
         }
     }
 
-    // check diagonals
-    const diagonal1 = board.map((row, i) => row[i]);
-    const diagonal2 = board.map((row, i) => row[board.length - i - 1]);
+    // Check diagonals
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board.length; j++) {
+            if (board[i][j] === '') {
+                continue;
+            }
 
-    if (diagonal1.every(cell => cell === diagonal1[0] && cell !== '')) {
-        return diagonal1[0] === state.player1.symbol ? 'player1' : 'player2';
+            let match = true;
+
+            for (let k = 0; k < matchCount; k++) {
+                if (i + k >= board.length || j + k >= board.length || board[i + k][j + k] !== board[i][j]) {
+                    match = false;
+                    break;
+                }
+                if (board[i + k][j + k] !== board[i][j]) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) {
+                return state.currentPlayer;
+            }
+        }
     }
 
-    if (diagonal2.every(cell => cell === diagonal2[0] && cell !== '')) {
-        return diagonal2[0] === state.player1.symbol ? 'player1' : 'player2';
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board.length; j++) {
+            if (board[i][j] === '') {
+                continue;
+            }
+
+            let match = true;
+
+            for (let k = 0; k < matchCount; k++) {
+                if (i + k >= board.length || j - k < 0) {
+                    match = false;
+                    break;
+                }
+                if (board[i + k][j - k] !== board[i][j]) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) {
+                return state.currentPlayer;
+            }
+        }
     }
 
     return null;
@@ -145,6 +229,8 @@ function checkGameOver() {
 }
 
 function updateCell(r, c) {
+    state.board[r][c] = state[state.currentPlayer].symbol;
+
     const cell = document.querySelector(`.row:nth-child(${r + 1}) .cell:nth-child(${c + 1})`);
     cell.classList.add('filled');
     cell.innerHTML = state.board[r][c];
@@ -172,9 +258,15 @@ function updateUI() {
 // Start button onclick event
 function startGame() {
     resetState();
-    
+
     state.currentPlayer = Math.random() < 0.5 ? 'player1' : 'player2';
     state.boardSize = parseInt(boardSizeSelector.value);
+
+    state.matchCount = parseInt(matchCountSelector.value);
+    if (state.matchCount >= state.boardSize) {
+        state.matchCount = state.boardSize;
+        matchCountSelector.value = state.matchCount;
+    }
 
     resetBoardState(state.boardSize);
     resetBoard();

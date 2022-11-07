@@ -13,8 +13,11 @@
     <div class="screen" id="menu">
         <h1>Noughts & Crosses</h1>
 
-        <label for="quantity">Board Size (3 to 5)</label>
+        <label for="board-size">Board Size (3 to 5)</label>
         <input type="number" id="board-size-selector" name="board-size" min="3" max="5" value="3">
+
+        <label for="match-count">Match Number (3 to 5, must be >= board size)</label>
+        <input type="number" id="match-count-selector" name="match-count" min="3" max="5" value="3">
 
         <a href="#" class="button" onclick="startGame()">Start Game</a>
     </div>
