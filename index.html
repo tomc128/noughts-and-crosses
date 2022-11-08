@@ -15,13 +15,25 @@
     <div class="screen" id="menu">
         <h1>Noughts & Crosses</h1>
 
-        <label for="board-size">Board Size (3 to 5)</label>
-        <input type="number" id="board-size-selector" name="board-size" min="3" max="5" value="3">
+        <!-- <label for="board-size">Board Size (3 to 5)</label>
+        <input type="number" id="board-size-selector" name="board-size" min="3" max="5" value="3"> -->
 
-        <label for="match-count">Match Number (3 to 5, must be >= board size)</label>
-        <input type="number" id="match-count-selector" name="match-count" min="3" max="5" value="3">
+        <div class="selector">
+            <a class="button circle" id="board-size-selector-down" onclick="changeBoardSize(-1)">-</a>
+            <span id="board-size-selector">3</span>
+            <a class="button circle" id="board-size-selector-up" onclick="changeBoardSize(+1)">+</a>
+        </div>
 
-        <a href="#" class="button" onclick="startGame()">Start Game</a>
+        <!-- <label for="match-count">Match Number (3 to 5, must be >= board size)</label>
+        <input type="number" id="match-count-selector" name="match-count" min="3" max="5" value="3"> -->
+
+        <div class="selector">
+            <a class="button circle" id="match-count-selector-down" onclick="changeMatchCount(-1)">-</a>
+            <span id="match-count-selector">3</span>
+            <a class="button circle" id="match-count-selector-up" onclick="changeMatchCount(+1)">+</a>
+        </div>
+
+        <a href="#" class="button" onclick="startGame(true)">Start Game</a>
     </div>
 
     <div class="screen" id="game">
@@ -40,7 +52,7 @@
             <h2 id="winner"></h2>
 
             <div class="actions">
-                <a href="#" class="button" onclick="replay()">Play Again</a>
+                <a href="#" class="button" onclick="startGame(false)">Play Again</a>
                 <a href="#" class="button" onclick="showScreen('menu')">Quit</a>
             </div>
         </div>

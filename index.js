@@ -57,7 +57,7 @@ function cellClicked(r, c) {
 
     console.log(`Cell ${r}, ${c} is now ${state.board[r][c]}`);
 
-    updateUI();
+    updateGameUI();
 
     const winner = checkWin();
     if (winner) {
@@ -284,42 +284,58 @@ function hideAllOverlays() {
     }
 }
 
-function updateUI() {
+function updateGameUI() {
     player1ScoreDisplay.innerHTML = state.player1.score;
     player2ScoreDisplay.innerHTML = state.player2.score;
 
     currentTurnDisplay.innerHTML = state.currentPlayer === 'player1' ? 'Player 1 (X)' : 'Player 2 (O)';
 }
 
-// Start button onclick event
-function startGame() {
-    resetState();
+function changeBoardSize(x) {
+    let newBoardSize = state.boardSize + x;
 
-    state.currentPlayer = Math.random() < 0.5 ? 'player1' : 'player2';
-    state.boardSize = parseInt(boardSizeSelector.value);
-
-    state.matchCount = parseInt(matchCountSelector.value);
-    if (state.matchCount >= state.boardSize) {
-        state.matchCount = state.boardSize;
-        matchCountSelector.value = state.matchCount;
+    if (newBoardSize > 5 || newBoardSize < 3) {
+        newBoardSize = state.boardSize;
     }
 
-    resetBoardState(state.boardSize);
-    resetBoard();
-    generateBoard(state.boardSize);
-    updateUI();
-
-    hideAllOverlays();
-    showScreen('game');
+    state.boardSize = newBoardSize;
+    changeMatchCount(0); // Force match count to be updated
+    updateMenuUI();
 }
 
-function replay() {
+function changeMatchCount(x) {
+    let newMatchCount = state.matchCount + x;
+
+    if (newMatchCount > 5 || newMatchCount < 3) {
+        newMatchCount = state.matchCount;
+    }
+
+    if (newMatchCount > state.boardSize) {
+        newMatchCount = state.boardSize;
+    }
+    
+    state.matchCount = newMatchCount;
+    updateMenuUI();
+}
+
+function updateMenuUI() {
+    boardSizeSelector.innerText = state.boardSize;
+    matchCountSelector.innerText = state.matchCount;
+}
+
+// Start button onclick event
+function startGame(resetScores = false) {
     state.currentPlayer = Math.random() < 0.5 ? 'player1' : 'player2';
+
+    if (resetScores) {
+        state.player1.score = 0;
+        state.player2.score = 0;
+    }
 
     resetBoard();
     resetBoardState(state.boardSize);
     generateBoard(state.boardSize);
-    updateUI();
+    updateGameUI();
 
     hideAllOverlays();
     showScreen('game');

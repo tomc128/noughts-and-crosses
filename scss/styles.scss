@@ -151,8 +151,25 @@ $overlay-no-blur-opacity: 0.5;
 
     transition: background-color 1s cubic-bezier(0.075, 0.82, 0.165, 1), color 1s cubic-bezier(0.075, 0.82, 0.165, 1);
 
+    &.circle {
+        text-align: center;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+    }
+
     &:hover {
         background-color: $foreground-colour;
         color: $background-colour;
+    }
+}
+
+.selector {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+
+    .button {
+        height: 100%;
     }
 }
