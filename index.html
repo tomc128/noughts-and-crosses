@@ -18,18 +18,20 @@
         <!-- <label for="board-size">Board Size (3 to 5)</label>
         <input type="number" id="board-size-selector" name="board-size" min="3" max="5" value="3"> -->
 
+        <h3>Board Size</h3>
         <div class="selector">
             <a class="button circle" id="board-size-selector-down" onclick="changeBoardSize(-1)">-</a>
-            <span id="board-size-selector">3</span>
+            <span class="selector-text" id="board-size-selector">3</span>
             <a class="button circle" id="board-size-selector-up" onclick="changeBoardSize(+1)">+</a>
         </div>
 
         <!-- <label for="match-count">Match Number (3 to 5, must be >= board size)</label>
         <input type="number" id="match-count-selector" name="match-count" min="3" max="5" value="3"> -->
 
+        <h3>Match Count</h3>
         <div class="selector">
             <a class="button circle" id="match-count-selector-down" onclick="changeMatchCount(-1)">-</a>
-            <span id="match-count-selector">3</span>
+            <span class="selector-text" id="match-count-selector">3</span>
             <a class="button circle" id="match-count-selector-up" onclick="changeMatchCount(+1)">+</a>
         </div>
 
@@ -38,7 +40,7 @@
 
     <div class="screen" id="game">
         <h1>Game</h1>
-        <h2>It's <span id="current-turn">NULL</span> turn!</h2>
+        <h2>It's <span id="current-turn"></span> turn!</h2>
 
         <span>Player 1: <span id="player1-score"></span></span>
         <span>Player 2: <span id="player2-score"></span></span>
