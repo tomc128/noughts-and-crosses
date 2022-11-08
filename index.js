@@ -299,7 +299,7 @@ function changeBoardSize(x) {
     }
 
     state.boardSize = newBoardSize;
-    changeMatchCount(0); // Force match count to be updated
+    setMatchCount(newBoardSize); // Force match count to be updated
     updateMenuUI();
 }
 
@@ -315,6 +315,11 @@ function changeMatchCount(x) {
     }
     
     state.matchCount = newMatchCount;
+    updateMenuUI();
+}
+
+function setMatchCount(x) {
+    state.matchCount = x;
     updateMenuUI();
 }
 
